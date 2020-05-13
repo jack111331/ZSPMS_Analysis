@@ -1,0 +1,108 @@
+package com.tencent.mm.sdk.modelmsg;
+
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import com.tencent.mm.sdk.b.a;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
+public class WXImageObject implements WXMediaMessage.IMediaObject {
+  private static final int CONTENT_LENGTH_LIMIT = 10485760;
+  
+  private static final int PATH_LENGTH_LIMIT = 10240;
+  
+  private static final String TAG = "MicroMsg.SDK.WXImageObject";
+  
+  private static final int URL_LENGTH_LIMIT = 10240;
+  
+  public byte[] imageData;
+  
+  public String imagePath;
+  
+  public String imageUrl;
+  
+  public WXImageObject() {}
+  
+  public WXImageObject(Bitmap paramBitmap) {
+    try {
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      this();
+      paramBitmap.compress(Bitmap.CompressFormat.JPEG, 85, byteArrayOutputStream);
+      this.imageData = byteArrayOutputStream.toByteArray();
+      byteArrayOutputStream.close();
+    } catch (Exception exception) {
+      exception.printStackTrace();
+    } 
+  }
+  
+  public WXImageObject(byte[] paramArrayOfbyte) {
+    this.imageData = paramArrayOfbyte;
+  }
+  
+  private int getFileSize(String paramString) {
+    byte b = 0;
+    int i = b;
+    if (paramString != null) {
+      if (paramString.length() == 0)
+        return b; 
+    } else {
+      return i;
+    } 
+    File file = new File(paramString);
+    i = b;
+    if (file.exists())
+      i = (int)file.length(); 
+    return i;
+  }
+  
+  public boolean checkArgs() {
+    null = false;
+    if ((this.imageData == null || this.imageData.length == 0) && (this.imagePath == null || this.imagePath.length() == 0) && (this.imageUrl == null || this.imageUrl.length() == 0)) {
+      a.a("MicroMsg.SDK.WXImageObject", "checkArgs fail, all arguments are null");
+      return null;
+    } 
+    if (this.imageData != null && this.imageData.length > 10485760) {
+      a.a("MicroMsg.SDK.WXImageObject", "checkArgs fail, content is too large");
+      return null;
+    } 
+    if (this.imagePath != null && this.imagePath.length() > 10240) {
+      a.a("MicroMsg.SDK.WXImageObject", "checkArgs fail, path is invalid");
+      return null;
+    } 
+    if (this.imagePath != null && getFileSize(this.imagePath) > 10485760) {
+      a.a("MicroMsg.SDK.WXImageObject", "checkArgs fail, image content is too large");
+      return null;
+    } 
+    if (this.imageUrl != null && this.imageUrl.length() > 10240) {
+      a.a("MicroMsg.SDK.WXImageObject", "checkArgs fail, url is invalid");
+      return null;
+    } 
+    return true;
+  }
+  
+  public void serialize(Bundle paramBundle) {
+    paramBundle.putByteArray("_wximageobject_imageData", this.imageData);
+    paramBundle.putString("_wximageobject_imagePath", this.imagePath);
+    paramBundle.putString("_wximageobject_imageUrl", this.imageUrl);
+  }
+  
+  public void setImagePath(String paramString) {
+    this.imagePath = paramString;
+  }
+  
+  public int type() {
+    return 2;
+  }
+  
+  public void unserialize(Bundle paramBundle) {
+    this.imageData = paramBundle.getByteArray("_wximageobject_imageData");
+    this.imagePath = paramBundle.getString("_wximageobject_imagePath");
+    this.imageUrl = paramBundle.getString("_wximageobject_imageUrl");
+  }
+}
+
+
+/* Location:              D:\Code\Crack\dex-tools-2.1-20190905-lanchon\zspns-pcgw-P36417A-0429-dex2jar.jar!\com\tencent\mm\sdk\modelmsg\WXImageObject.class
+ * Java compiler version: 6 (50.0)
+ * JD-Core Version:       1.1.3
+ */
