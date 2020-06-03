@@ -1,0 +1,1 @@
+"C:\Program Files\wireshark\Wireshark.exe" -X lua_script:get_file_list.lua -r "D:\code\crack\zspns.pcapng"
